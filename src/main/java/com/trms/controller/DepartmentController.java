@@ -33,20 +33,35 @@ public class DepartmentController {
 
     }
 
-    // Create a new departments
+    // Get a single department
+    @GetMapping("/departments/{id}")
+    public ResponseEntity<Department> getSingleDepartment(@PathVariable Long id){
+        return departmentService.getSingleDepartmentResponse(id);
+    }
+
+    // Create a new department
     @PostMapping("/departments")
     public ResponseEntity<Department> createNewProtocol(@Valid @RequestBody Department department, HttpServletRequest request){
         return departmentService.createNewDepartment(department, request);
     }
 
+    // Update Department with PATCH
+    @PatchMapping("/departments/{id}")
+    public ResponseEntity<Department> patchUpdateDepartment(@PathVariable Long id, @RequestBody Department department) {
+        return departmentService.patchUpdateDepartment(id, department);
+    }
 
-    // Get a single department
+    // Update Department with PUT
+    @PutMapping("/departments/{id}")
+    public ResponseEntity<Department> putUpdateDepartment(@PathVariable Long id, @RequestBody Department department) {
+        return departmentService.putUpdateDepartment(id, department);
+    }
 
-
-    // Update a department
-
-
-    // Delete a department
+    // Delete Department
+    @DeleteMapping("/departments/{id}")
+    public ResponseEntity<Department> deleteDepartment(@PathVariable Long id) {
+        return departmentService.deleteDepartment(id);
+    }
 
 
 }

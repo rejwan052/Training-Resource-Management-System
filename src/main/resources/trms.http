@@ -22,6 +22,25 @@ Content-Type: application/json
 
 ###
 
+PATCH {{host-url}}/departments/1
+Content-Type: application/json
+
+{
+  "name":"Ministry of Education update patch"
+}
+
+###
+
+PUT {{host-url}}/departments/1
+Content-Type: application/json
+
+{
+  "name":"Ministry of Education update put",
+  "description":"The Ministry of Educations is the ministry responsible for secondary, vocational and tertiary education in Bangladesh. Primary education and mass literacy is the responsibility of the Ministry of Primary and Mass Education"
+}
+
+###
+
 ##
 
 

@@ -217,7 +217,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Handle Protocol name already exists exception
+     * Handle Entity Attribute already exists exception
      *
      * @param ex the Exception
      * @return the ApiError object
@@ -226,7 +226,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleProtocolNameAlreadyExist(final RuntimeException ex, final WebRequest request) {
         logger.error("409 Status Code", ex);
         ApiError apiError = new ApiError(HttpStatus.CONFLICT);
-        apiError.setMessage(messageSource.getMessage("message.protocolNameExistsError", null, request.getLocale()));
+        apiError.setMessage(messageSource.getMessage("message.entityAttributeExistsError", null, request.getLocale()));
         apiError.setDebugMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }

@@ -9,6 +9,7 @@ import com.trms.service.IDepartmentService;
 import com.trms.utility.ApiUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,6 +31,8 @@ public class DepartmentService implements IDepartmentService {
     private ApiUtils apiUtils;
 
     public DepartmentService(DepartmentRepository departmentRepository,ApiUtils apiUtils) {
+        Assert.notNull(departmentRepository, "DepartmentRepository must not be null!");
+        Assert.notNull(apiUtils, "ApiUtils must not be null!");
         this.departmentRepository = departmentRepository;
         this.apiUtils = apiUtils;
     }
@@ -41,7 +45,8 @@ public class DepartmentService implements IDepartmentService {
 
     @Override
     public ResponseEntity<Department> getSingleDepartmentResponse(Long id) {
-        return null;
+        Department getDepartment = findDepartmentIfExists(id);
+        return new ResponseEntity<Department>(getDepartment, HttpStatus.OK);
     }
 
     @Override
@@ -61,17 +66,25 @@ public class DepartmentService implements IDepartmentService {
 
     @Override
     public ResponseEntity<Department> patchUpdateDepartment(Long id, Department departmentUpdates) {
-        return null;
+        Department existingDepartment = findDepartmentIfExists(id);
+        apiUtils.merge(existingDepartment, departmentUpdates);
+        existingDepartment.setId(id);
+        return new ResponseEntity<Department>(departmentRepository.saveAndFlush(existingDepartment),HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Department> putUpdateDepartment(Long id, Department departmentUpdates) {
-        return null;
+        Department existingDepartment = findDepartmentIfExists(id);
+        BeanUtils.copyProperties(departmentUpdates,existingDepartment);
+        existingDepartment.setId(id);
+        return new ResponseEntity<Department>(departmentRepository.saveAndFlush(existingDepartment),HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Department> deleteDepartment(Long id) {
-        return null;
+        Department existingDepartment = findDepartmentIfExists(id);
+        departmentRepository.delete(existingDepartment);
+        return new ResponseEntity<Department>(HttpStatus.NO_CONTENT);
     }
 
 
