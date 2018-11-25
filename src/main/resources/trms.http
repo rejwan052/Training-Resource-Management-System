@@ -45,3 +45,41 @@ Content-Type: application/json
 
 
 
+# API DESIGNATION MANAGEMENT
+GET {{host-url}}/designations
+
+###
+
+POST {{host-url}}/designations
+Content-Type: application/json
+
+{
+  "name":"Upazila Livestock Officer"
+}
+
+###
+
+PATCH {{host-url}}/designations/1
+Content-Type: application/json
+
+{
+  "name":"Software engineer patch update"
+}
+
+###
+
+PUT {{host-url}}/designations/1
+Content-Type: application/json
+
+{
+  "name":"Software engineer put update"
+}
+
+###
+
+##
+
+
+
+
+

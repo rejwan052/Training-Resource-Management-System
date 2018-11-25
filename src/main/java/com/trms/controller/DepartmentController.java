@@ -3,6 +3,8 @@ package com.trms.controller;
 import com.querydsl.core.types.Predicate;
 import com.trms.persistence.model.Department;
 import com.trms.service.IDepartmentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,12 +22,14 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1")
 public class DepartmentController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private IDepartmentService departmentService;
 
-    // Get all protocols
+    // Get all departments
     @GetMapping("/departments")
-    public ResponseEntity<Page<Department>> getAllProtocols(@QuerydslPredicate(root = Department.class) Predicate predicate,
+    public ResponseEntity<Page<Department>> getAllDepartments(@QuerydslPredicate(root = Department.class) Predicate predicate,
                                                             @PageableDefault(size=15) @SortDefault.SortDefaults({
                                                             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)}) Pageable pageable){
 
