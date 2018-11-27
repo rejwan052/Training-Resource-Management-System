@@ -2,6 +2,7 @@ package com.trms.service.impl;
 
 import com.trms.persistence.model.Employee;
 import com.trms.service.IEmployeeService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +15,7 @@ import java.util.List;
 public class EmployeeService implements IEmployeeService {
 
     @Override
-    public ResponseEntity<List<Employee>> getAllEmployeesResponse() {
+    public ResponseEntity<Page<Employee>> getAllEmployeesResponse() {
         return null;
     }
 
