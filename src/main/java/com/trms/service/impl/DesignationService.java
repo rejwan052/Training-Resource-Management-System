@@ -3,7 +3,6 @@ package com.trms.service.impl;
 import com.querydsl.core.types.Predicate;
 import com.trms.exception.EntityAttributeAlreadyExistsException;
 import com.trms.exception.ResourceNotFoundException;
-import com.trms.persistence.model.Department;
 import com.trms.persistence.model.Designation;
 import com.trms.persistence.repository.DesignationRepository;
 import com.trms.service.IDesignationService;

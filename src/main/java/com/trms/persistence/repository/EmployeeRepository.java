@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee,Long>, QuerydslPredicateExecutor<Employee>, QuerydslBinderCustomizer<QEmployee> {
 
+    Employee findByFirstNameAndLastNameIgnoreCase(String firstName,String lastName);
+
     @Override
     default public void customize(QuerydslBindings bindings, QEmployee qEmployee){
         bindings.bind(String.class).first((StringPath path,String value) -> path.containsIgnoreCase(value));

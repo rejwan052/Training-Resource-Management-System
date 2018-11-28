@@ -1,6 +1,5 @@
 package com.trms.persistence.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.trms.enums.Gender;
 import com.trms.persistence.model.audit.DateAudit;
 import org.hibernate.annotations.OnDelete;
@@ -36,7 +35,6 @@ public class Employee extends DateAudit {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "departmentId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     private Department department;
 
     public Long getId() {
