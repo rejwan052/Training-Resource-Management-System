@@ -1,7 +1,6 @@
 package com.trms.controller;
 
 import com.querydsl.core.types.Predicate;
-import com.trms.persistence.model.Designation;
 import com.trms.persistence.model.Employee;
 import com.trms.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
