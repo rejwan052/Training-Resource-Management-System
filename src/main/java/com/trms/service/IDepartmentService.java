@@ -16,5 +16,6 @@ public interface IDepartmentService {
     ResponseEntity<Department> patchUpdateDepartment(Long id, Department departmentUpdates);
     ResponseEntity<Department> putUpdateDepartment(Long id, Department departmentUpdates);
     ResponseEntity<Department> deleteDepartment(Long id);
+    Page<Department> searchDepartments(String searchTerm,Pageable pageable);
 
 }

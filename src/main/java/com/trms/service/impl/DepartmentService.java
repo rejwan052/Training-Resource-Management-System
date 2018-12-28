@@ -5,6 +5,7 @@ import com.trms.exception.EntityAttributeAlreadyExistsException;
 import com.trms.exception.ResourceNotFoundException;
 import com.trms.persistence.model.Department;
 import com.trms.persistence.repository.DepartmentRepository;
+import com.trms.predicates.DepartmentPredicates;
 import com.trms.service.IDepartmentService;
 import com.trms.utility.ApiUtils;
 import org.slf4j.Logger;
@@ -87,6 +88,15 @@ public class DepartmentService implements IDepartmentService {
         return new ResponseEntity<Department>(HttpStatus.NO_CONTENT);
     }
 
+    @Override
+    public Page<Department> searchDepartments(String searchTerm, Pageable pageable) {
+
+        Predicate departmentSearchPredicate = DepartmentPredicates.searchDepartmentsByNameOrDescription(searchTerm);
+        LOGGER.info("Department search predicate :"+departmentSearchPredicate.toString());
+        Page<Department> departments = departmentRepository.findAll(departmentSearchPredicate,pageable);
+
+        return departments;
+    }
 
     // Non API
     private boolean isDepartmentNameExist(final String departmentName) {

@@ -16,7 +16,6 @@ public class Department extends DateAudit {
     @NotNull
     private String name;
 
-    @NotNull
     private String description;
 
     public Long getId() {
