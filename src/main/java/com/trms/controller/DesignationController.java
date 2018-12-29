@@ -31,7 +31,7 @@ public class DesignationController {
 
     // Get all designations
     @GetMapping("/designations")
-    public ResponseEntity<Page<Designation>> getAllDesignations(@QuerydslPredicate(root = Designation.class) Predicate predicate, @PageableDefault(size=15) @SortDefault.SortDefaults({
+    public ResponseEntity<Page<Designation>> getAllDesignations(@QuerydslPredicate(root = Designation.class) Predicate predicate, @PageableDefault(size=10) @SortDefault.SortDefaults({
                                                                     @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)}) Pageable pageable){
 
         return designationService.getAllDesignationsResponse(predicate,pageable);
