@@ -41,7 +41,6 @@ public class DesignationService implements IDesignationService {
     @Override
     public ResponseEntity<Page<Designation>> getAllDesignationsResponse(Predicate predicate, Pageable pageable) {
         Page<Designation> page = designationRepository.findAll(predicate,pageable);
-        LOGGER.info("Page designation content "+page.getNumberOfElements());
         return new ResponseEntity<Page<Designation>>(page, HttpStatus.OK);
     }
 

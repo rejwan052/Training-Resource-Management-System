@@ -82,7 +82,7 @@ public class AddressService implements IAddressService {
                     existingAddress.setEmployee(employee);
                     updatedAddress = addressRepository.saveAndFlush(existingAddress);
                 }else {
-                    LOGGER.info("New address found with address :"+updateAddress.getAddressLine());
+                    LOGGER.info("New address found with address :"+updateAddress.getAddressLine1());
                     updateAddress.setEmployee(employee);
                     updatedAddress = addressRepository.saveAndFlush(updateAddress);
                 }
