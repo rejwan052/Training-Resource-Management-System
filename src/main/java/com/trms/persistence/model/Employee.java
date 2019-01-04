@@ -6,7 +6,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -17,10 +16,11 @@ public class Employee extends DateAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     private String firstName;
 
     private String lastName;
+
+    private String email;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
@@ -91,5 +91,13 @@ public class Employee extends DateAudit {
 
     public void setDesignation(Designation designation) {
         this.designation = designation;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

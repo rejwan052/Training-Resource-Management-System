@@ -1,13 +1,19 @@
 package com.trms.service.impl;
 
 import com.querydsl.core.types.Predicate;
+import com.trms.enums.Gender;
 import com.trms.exception.ResourceNotFoundException;
+import com.trms.payload.EmployeeCreateRequest;
+import com.trms.persistence.model.Department;
 import com.trms.persistence.model.Designation;
 import com.trms.persistence.model.Employee;
+import com.trms.persistence.repository.DepartmentRepository;
+import com.trms.persistence.repository.DesignationRepository;
 import com.trms.persistence.repository.EmployeeRepository;
 import com.trms.service.IEmployeeService;
 import com.trms.utility.ApiUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -26,6 +33,12 @@ public class EmployeeService implements IEmployeeService {
     private EmployeeRepository employeeRepository;
 
     private ApiUtils apiUtils;
+
+    @Autowired
+    private DesignationRepository designationRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepositry;
 
     public EmployeeService(EmployeeRepository employeeRepository, ApiUtils apiUtils) {
         this.employeeRepository = employeeRepository;
@@ -45,7 +58,25 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public ResponseEntity<Employee> createNewEmployee(Employee employee, HttpServletRequest request) {
+    public ResponseEntity<Employee> createNewEmployee(EmployeeCreateRequest employeeCreateRequest, HttpServletRequest request) {
+
+        Employee employee = new Employee();
+        employee.setFirstName(employeeCreateRequest.getFirstName());
+        employee.setLastName(employeeCreateRequest.getLastName());
+        employee.setEmail(employeeCreateRequest.getEmail());
+        employee.setDateOfBirth(employeeCreateRequest.getDateOfBirth());
+        if(employeeCreateRequest.getGender().toUpperCase().equalsIgnoreCase("MALE")){
+            employee.setGender(Gender.MALE);
+        }else{
+            employee.setGender(Gender.FEMALE);
+        }
+
+
+        Optional<Designation> designation = designationRepository.findById(employeeCreateRequest.getDesignationId());
+        employee.setDesignation(designation.get());
+
+        Optional<Department> department = departmentRepositry.findById(employeeCreateRequest.getDepartmentId());
+        employee.setDepartment(department.get());
 
         Employee newEmployee = employeeRepository.saveAndFlush(employee);
         HttpHeaders responseHeaders = new HttpHeaders();

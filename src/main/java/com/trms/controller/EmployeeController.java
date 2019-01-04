@@ -1,6 +1,7 @@
 package com.trms.controller;
 
 import com.querydsl.core.types.Predicate;
+import com.trms.payload.EmployeeCreateRequest;
 import com.trms.persistence.model.Employee;
 import com.trms.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class EmployeeController {
 
     // Get all employees
     @GetMapping("/employees")
-    public ResponseEntity<Page<Employee>> getAllEmployees(@QuerydslPredicate(root = Employee.class) Predicate predicate, @PageableDefault(size=15) @SortDefault.SortDefaults({
+    public ResponseEntity<Page<Employee>> getAllEmployees(@QuerydslPredicate(root = Employee.class) Predicate predicate, @PageableDefault(size=10) @SortDefault.SortDefaults({
             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)}) Pageable pageable){
 
         return employeeService.getAllEmployeesResponse(predicate,pageable);
@@ -40,7 +41,7 @@ public class EmployeeController {
 
     // Create a new employee
     @PostMapping("/employees")
-    public ResponseEntity<Employee> createNewEmployee(@Valid @RequestBody Employee employee, HttpServletRequest request){
+    public ResponseEntity<Employee> createNewEmployee(@Valid @RequestBody EmployeeCreateRequest employee, HttpServletRequest request){
         return employeeService.createNewEmployee(employee, request);
     }
 
