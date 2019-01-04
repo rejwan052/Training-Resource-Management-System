@@ -4,12 +4,14 @@ import com.querydsl.core.types.Predicate;
 import com.trms.enums.Gender;
 import com.trms.exception.ResourceNotFoundException;
 import com.trms.payload.EmployeeCreateRequest;
+import com.trms.persistence.model.Address;
 import com.trms.persistence.model.Department;
 import com.trms.persistence.model.Designation;
 import com.trms.persistence.model.Employee;
 import com.trms.persistence.repository.DepartmentRepository;
 import com.trms.persistence.repository.DesignationRepository;
 import com.trms.persistence.repository.EmployeeRepository;
+import com.trms.service.IAddressService;
 import com.trms.service.IEmployeeService;
 import com.trms.utility.ApiUtils;
 import org.springframework.beans.BeanUtils;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +42,9 @@ public class EmployeeService implements IEmployeeService {
 
     @Autowired
     private DepartmentRepository departmentRepositry;
+
+    @Autowired
+    private IAddressService addressService;
 
     public EmployeeService(EmployeeRepository employeeRepository, ApiUtils apiUtils) {
         this.employeeRepository = employeeRepository;
@@ -79,6 +85,12 @@ public class EmployeeService implements IEmployeeService {
         employee.setDepartment(department.get());
 
         Employee newEmployee = employeeRepository.saveAndFlush(employee);
+
+        /*Create Employee Address*/
+        if(null != employeeCreateRequest.getAddress()){
+            createEmployeeAddress(newEmployee,employeeCreateRequest.getAddress());
+        }
+
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Location", employeeUrlHelper(newEmployee, request));
 
@@ -132,5 +144,12 @@ public class EmployeeService implements IEmployeeService {
     private Employee findEmployeeIfExists(Long id) {
         return employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
+    }
+
+    private void createEmployeeAddress(Employee employee,Address address){
+        if(null != address){
+            address.setEmployee(employee);
+            addressService.createNewAddresses(Arrays.asList(address));
+        }
     }
 }

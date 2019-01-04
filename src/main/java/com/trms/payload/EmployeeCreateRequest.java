@@ -1,6 +1,7 @@
 package com.trms.payload;
 
 import com.trms.enums.Gender;
+import com.trms.persistence.model.Address;
 import com.trms.validator.Enum;
 
 import javax.validation.constraints.Email;
@@ -28,6 +29,8 @@ public class EmployeeCreateRequest implements Serializable {
     private Long designationId;
 
     private Long departmentId;
+
+    private Address address;
 
     public Long getId() {
         return id;
@@ -91,5 +94,13 @@ public class EmployeeCreateRequest implements Serializable {
 
     public void setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }
