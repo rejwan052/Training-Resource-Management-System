@@ -32,7 +32,7 @@ public class Employee extends DateAudit {
     @JoinColumn(name = "designationId", unique = true)
     private Designation designation;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "departmentId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Department department;
