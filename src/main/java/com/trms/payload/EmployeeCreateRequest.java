@@ -2,6 +2,8 @@ package com.trms.payload;
 
 import com.trms.enums.Gender;
 import com.trms.persistence.model.Address;
+import com.trms.persistence.model.Department;
+import com.trms.persistence.model.Designation;
 import com.trms.validator.Enum;
 
 import javax.validation.constraints.Email;
@@ -26,9 +28,9 @@ public class EmployeeCreateRequest implements Serializable {
 
     private LocalDate dateOfBirth;
 
-    private Long designationId;
+    private Designation designation;
 
-    private Long departmentId;
+    private Department department;
 
     private Address address;
 
@@ -80,20 +82,20 @@ public class EmployeeCreateRequest implements Serializable {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Long getDesignationId() {
-        return designationId;
+    public Designation getDesignation() {
+        return designation;
     }
 
-    public void setDesignationId(Long designationId) {
-        this.designationId = designationId;
+    public void setDesignation(Designation designation) {
+        this.designation = designation;
     }
 
-    public Long getDepartmentId() {
-        return departmentId;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     public Address getAddress() {

@@ -8,6 +8,7 @@ import com.trms.persistence.repository.DepartmentRepository;
 import com.trms.predicates.DepartmentPredicates;
 import com.trms.service.IDepartmentService;
 import com.trms.utility.ApiUtils;
+import org.apache.commons.collections4.IteratorUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -96,6 +99,18 @@ public class DepartmentService implements IDepartmentService {
         Page<Department> departments = departmentRepository.findAll(departmentSearchPredicate,pageable);
 
         return departments;
+    }
+
+    @Override
+    public List<Department> searchByDepartmentName(String searchTerm) {
+
+        Predicate departmentSearchPredicate = DepartmentPredicates.searchDepartmentsByName(searchTerm);
+        LOGGER.info("Department search predicate :"+departmentSearchPredicate.toString());
+        Iterable<Department> departmentIterable = departmentRepository.findAll(departmentSearchPredicate);
+        List<Department> departmentList = new ArrayList<>();
+        departmentIterable.forEach(departmentList::add);
+
+        return departmentList;
     }
 
     // Non API

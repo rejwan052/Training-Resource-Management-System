@@ -3,8 +3,11 @@ package com.trms.service.impl;
 import com.querydsl.core.types.Predicate;
 import com.trms.exception.EntityAttributeAlreadyExistsException;
 import com.trms.exception.ResourceNotFoundException;
+import com.trms.persistence.model.Department;
 import com.trms.persistence.model.Designation;
 import com.trms.persistence.repository.DesignationRepository;
+import com.trms.predicates.DepartmentPredicates;
+import com.trms.predicates.DesignationPredicates;
 import com.trms.service.IDesignationService;
 import com.trms.utility.ApiUtils;
 import org.slf4j.Logger;
@@ -20,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -85,6 +90,18 @@ public class DesignationService implements IDesignationService {
         Designation existingDesignation = findDesignationIfExists(id);
         designationRepository.delete(existingDesignation);
         return new ResponseEntity<Designation>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public List<Designation> searchByDesignationName(String searchTerm) {
+
+        Predicate designationSearchPredicate = DesignationPredicates.searchDesignationsByName(searchTerm);
+        LOGGER.info("Department search predicate :"+designationSearchPredicate.toString());
+        Iterable<Designation> designationIterable = designationRepository.findAll(designationSearchPredicate);
+        List<Designation> designationList = new ArrayList<>();
+        designationIterable.forEach(designationList::add);
+
+        return designationList;
     }
 
     // Non API

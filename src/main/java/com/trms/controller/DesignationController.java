@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -36,6 +37,12 @@ public class DesignationController {
 
         return designationService.getAllDesignationsResponse(predicate,pageable);
 
+    }
+
+    // Get designations by searching name
+    @GetMapping("/designations/search-by-name")
+    public List<Designation> searchDesignationsByName(@RequestParam(value = "searchTerm") String searchTerm){
+        return designationService.searchByDesignationName(searchTerm);
     }
 
     // Get a single designation

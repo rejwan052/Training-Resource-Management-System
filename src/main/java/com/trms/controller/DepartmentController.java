@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -42,31 +43,12 @@ public class DepartmentController {
 
     }
 
-    // Search department
-    @GetMapping("/departments/search")
-    public String searchDepartment(@RequestParam(value = "start", required =false) int iDisplayStart,
-                                   @RequestParam(value = "length", required =false) int iDisplayLength,
-                                   @RequestParam(value = "draw", required =false) int sEcho,
-                                   @RequestParam(value = "search[value]", required =false) String search) throws IOException{
-
-        int pageNumber = (iDisplayStart + 1) / iDisplayLength;
-        PageRequest pageable = new PageRequest(pageNumber, iDisplayLength);
-        LOGGER.info("Search department "+search);
-        Page<Department> departmentPage = departmentService.searchDepartments(search,pageable);
-
-        int iTotalRecords = (int) (int) departmentPage.getTotalElements();
-        int iTotalDisplayRecords = departmentPage.getTotalPages() * iDisplayLength;
-        DatatablesPage<Department> dtPage = new DatatablesPage<>(
-                                            departmentPage.getContent(),
-                                            iTotalRecords,
-                                            iTotalDisplayRecords,
-                                            Integer.toString(sEcho));
-
-        String result = toJson(dtPage);
-        return result;
-
-
+    // Get departments by searching name
+    @GetMapping("/departments/search-by-name")
+    public List<Department> searchDepartmentsByName(@RequestParam(value = "searchTerm") String searchTerm){
+        return departmentService.searchByDepartmentName(searchTerm);
     }
+
 
     // Get a single department
     @GetMapping("/departments/{id}")

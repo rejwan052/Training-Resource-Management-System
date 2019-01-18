@@ -1,13 +1,13 @@
 package com.trms.service;
 
 import com.querydsl.core.types.Predicate;
-import com.trms.persistence.model.Department;
 import com.trms.persistence.model.Designation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface IDesignationService {
 
@@ -17,5 +17,6 @@ public interface IDesignationService {
     ResponseEntity<Designation> patchUpdateDesignation(Long id, Designation designationUpdates);
     ResponseEntity<Designation> putUpdateDesignation(Long id, Designation designationUpdates);
     ResponseEntity<Designation> deleteDesignation(Long id);
+    List<Designation> searchByDesignationName(String searchTerm);
 
 }

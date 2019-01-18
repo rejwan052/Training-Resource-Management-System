@@ -77,12 +77,15 @@ public class EmployeeService implements IEmployeeService {
             employee.setGender(Gender.FEMALE);
         }
 
+        employee.setDepartment(employeeCreateRequest.getDepartment());
+        employee.setDesignation(employeeCreateRequest.getDesignation());
 
-        Optional<Designation> designation = designationRepository.findById(employeeCreateRequest.getDesignationId());
+
+        /*Optional<Designation> designation = designationRepository.findById(employeeCreateRequest.getDesignationId());
         employee.setDesignation(designation.get());
 
         Optional<Department> department = departmentRepositry.findById(employeeCreateRequest.getDepartmentId());
-        employee.setDepartment(department.get());
+        employee.setDepartment(department.get());*/
 
         Employee newEmployee = employeeRepository.saveAndFlush(employee);
 

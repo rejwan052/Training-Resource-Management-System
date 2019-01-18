@@ -41,4 +41,28 @@ public class DepartmentPredicates {
         }
 
     }
+
+    public static Predicate searchDepartmentsByName(String searchTerm) {
+
+        BooleanBuilder b = new BooleanBuilder();
+        QDepartment qDepartment = QDepartment.department;
+
+        if (searchTerm == null || searchTerm.isEmpty()) {
+            return b;
+        } else {
+            final String[] parts = searchTerm.split("\\s+");
+
+            BooleanBuilder nameBooleanBuilder = new BooleanBuilder();
+            if (parts.length >= 2) {
+                for (String string : parts) {
+                    nameBooleanBuilder = nameBooleanBuilder.or(qDepartment.name.containsIgnoreCase(string));
+                }
+            } else {
+                nameBooleanBuilder = nameBooleanBuilder.or(qDepartment.name.containsIgnoreCase(searchTerm));
+            }
+
+            return b.and(nameBooleanBuilder);
+        }
+
+    }
 }
