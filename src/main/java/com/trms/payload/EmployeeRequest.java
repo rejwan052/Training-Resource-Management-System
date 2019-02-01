@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class EmployeeCreateRequest implements Serializable {
+public class EmployeeRequest implements Serializable {
 
     private Long id;
 

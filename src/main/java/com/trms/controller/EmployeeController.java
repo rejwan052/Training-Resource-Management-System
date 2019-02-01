@@ -1,7 +1,7 @@
 package com.trms.controller;
 
 import com.querydsl.core.types.Predicate;
-import com.trms.payload.EmployeeCreateRequest;
+import com.trms.payload.EmployeeRequest;
 import com.trms.persistence.model.Employee;
 import com.trms.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,22 +26,24 @@ public class EmployeeController {
 
     // Get all employees
     @GetMapping("/employees")
-    public ResponseEntity<Page<Employee>> getAllEmployees(@QuerydslPredicate(root = Employee.class) Predicate predicate, @PageableDefault(size=10) @SortDefault.SortDefaults({
-            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)}) Pageable pageable){
+    public ResponseEntity<Page<Employee>> getAllEmployees(@QuerydslPredicate(root = Employee.class) Predicate predicate,
+            @PageableDefault(size = 10) @SortDefault.SortDefaults({
+                    @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) }) Pageable pageable) {
 
-        return employeeService.getAllEmployeesResponse(predicate,pageable);
+        return employeeService.getAllEmployeesResponse(predicate, pageable);
 
     }
 
     // Get a single employee
     @GetMapping("/employees/{id}")
-    public ResponseEntity<Employee> getSingleEmployee(@PathVariable Long id){
+    public ResponseEntity<Employee> getSingleEmployee(@PathVariable Long id) {
         return employeeService.getSingleEmployeeResponse(id);
     }
 
     // Create a new employee
     @PostMapping("/employees")
-    public ResponseEntity<Employee> createNewEmployee(@Valid @RequestBody EmployeeCreateRequest employee, HttpServletRequest request){
+    public ResponseEntity<Employee> createNewEmployee(@Valid @RequestBody EmployeeRequest employee,
+            HttpServletRequest request) {
         return employeeService.createNewEmployee(employee, request);
     }
 
@@ -53,7 +55,7 @@ public class EmployeeController {
 
     // Update employee with PUT
     @PutMapping("/employees/{id}")
-    public ResponseEntity<Employee> putUpdateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
+    public ResponseEntity<Employee> putUpdateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest employee) {
         return employeeService.putUpdateEmployee(id, employee);
     }
 

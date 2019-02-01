@@ -3,10 +3,8 @@ package com.trms.service.impl;
 import com.querydsl.core.types.Predicate;
 import com.trms.enums.Gender;
 import com.trms.exception.ResourceNotFoundException;
-import com.trms.payload.EmployeeCreateRequest;
+import com.trms.payload.EmployeeRequest;
 import com.trms.persistence.model.Address;
-import com.trms.persistence.model.Department;
-import com.trms.persistence.model.Designation;
 import com.trms.persistence.model.Employee;
 import com.trms.persistence.repository.DepartmentRepository;
 import com.trms.persistence.repository.DesignationRepository;
@@ -26,8 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -64,21 +60,21 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public ResponseEntity<Employee> createNewEmployee(EmployeeCreateRequest employeeCreateRequest, HttpServletRequest request) {
+    public ResponseEntity<Employee> createNewEmployee(EmployeeRequest employeeRequest, HttpServletRequest request) {
 
         Employee employee = new Employee();
-        employee.setFirstName(employeeCreateRequest.getFirstName());
-        employee.setLastName(employeeCreateRequest.getLastName());
-        employee.setEmail(employeeCreateRequest.getEmail());
-        employee.setDateOfBirth(employeeCreateRequest.getDateOfBirth());
-        if(employeeCreateRequest.getGender().toUpperCase().equalsIgnoreCase("MALE")){
+        employee.setFirstName(employeeRequest.getFirstName());
+        employee.setLastName(employeeRequest.getLastName());
+        employee.setEmail(employeeRequest.getEmail());
+        employee.setDateOfBirth(employeeRequest.getDateOfBirth());
+        if(employeeRequest.getGender().toUpperCase().equalsIgnoreCase("MALE")){
             employee.setGender(Gender.MALE);
         }else{
             employee.setGender(Gender.FEMALE);
         }
 
-        employee.setDepartment(employeeCreateRequest.getDepartment());
-        employee.setDesignation(employeeCreateRequest.getDesignation());
+        employee.setDepartment(employeeRequest.getDepartment());
+        employee.setDesignation(employeeRequest.getDesignation());
 
 
         /*Optional<Designation> designation = designationRepository.findById(employeeCreateRequest.getDesignationId());
@@ -90,8 +86,8 @@ public class EmployeeService implements IEmployeeService {
         Employee newEmployee = employeeRepository.saveAndFlush(employee);
 
         /*Create Employee Address*/
-        if(null != employeeCreateRequest.getAddress()){
-            createEmployeeAddress(newEmployee,employeeCreateRequest.getAddress());
+        if(null != employeeRequest.getAddress()){
+            createEmployeeAddress(newEmployee,employeeRequest.getAddress());
         }
 
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -109,11 +105,19 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public ResponseEntity<Employee> putUpdateEmployee(Long id, Employee employeeUpdates) {
+    public ResponseEntity<Employee> putUpdateEmployee(Long id, EmployeeRequest employeeUpdates) {
         Employee existingEmployee = findEmployeeIfExists(id);
         BeanUtils.copyProperties(employeeUpdates,existingEmployee);
         existingEmployee.setId(id);
-        return new ResponseEntity<Employee>(employeeRepository.saveAndFlush(existingEmployee),HttpStatus.OK);
+
+        Employee updatedEmployee = employeeRepository.saveAndFlush(existingEmployee);
+
+        /*Create Employee Address*/
+        if(null != employeeUpdates.getAddress()){
+            createEmployeeAddress(updatedEmployee,employeeUpdates.getAddress());
+        }
+
+        return new ResponseEntity<Employee>(updatedEmployee,HttpStatus.OK);
     }
 
     @Override

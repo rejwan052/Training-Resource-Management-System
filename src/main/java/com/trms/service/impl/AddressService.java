@@ -48,7 +48,7 @@ public class AddressService implements IAddressService {
     @Override
     public ResponseEntity<List<Address>> createNewAddresses(List<Address> addresses) {
         List<Address> newAddresses = addressRepository.saveAll(addresses);
-        return new ResponseEntity<List<Address>>(newAddresses,HttpStatus.CREATED);
+        return new ResponseEntity<List<Address>>(newAddresses, HttpStatus.CREATED);
     }
 
     @Override
@@ -57,32 +57,33 @@ public class AddressService implements IAddressService {
     }
 
     @Override
-    public ResponseEntity<List<Address>> putUpdateAddresses(Employee employee, List<Address> addressesUpdates,List<Long> removedAddressIds) {
+    public ResponseEntity<List<Address>> putUpdateAddresses(Employee employee, List<Address> addressesUpdates,
+            List<Long> removedAddressIds) {
 
         List<Address> updatedAddresses = new ArrayList<Address>();
 
         // remove protocol detail
-        if(!CollectionUtils.isEmpty(removedAddressIds)) {
+        if (!CollectionUtils.isEmpty(removedAddressIds)) {
             List<Address> removedAddresses = addressRepository.deleteByIdIn(removedAddressIds);
-            LOGGER.info("removed addresses"+ Arrays.toString(removedAddresses.toArray()));
+            LOGGER.info("removed addresses" + Arrays.toString(removedAddresses.toArray()));
         }
 
-        if(!CollectionUtils.isEmpty(addressesUpdates)) {
+        if (!CollectionUtils.isEmpty(addressesUpdates)) {
             for (Address updateAddress : addressesUpdates) {
 
                 Long addressId = updateAddress.getId();
                 Address existingAddress = null;
                 Address updatedAddress = null;
 
-                if(null != addressId) {
+                if (null != addressId) {
                     existingAddress = findAddressIfExists(addressId);
                     BeanUtils.copyProperties(updateAddress, existingAddress);
                     // Ensure ID remains unchanged and protocol
                     existingAddress.setId(addressId);
                     existingAddress.setEmployee(employee);
                     updatedAddress = addressRepository.saveAndFlush(existingAddress);
-                }else {
-                    LOGGER.info("New address found with address :"+updateAddress.getAddressLine1());
+                } else {
+                    LOGGER.info("New address found with address :" + updateAddress.getAddressLine1());
                     updateAddress.setEmployee(employee);
                     updatedAddress = addressRepository.saveAndFlush(updateAddress);
                 }
@@ -97,8 +98,7 @@ public class AddressService implements IAddressService {
         return null;
     }
 
-
-    //Non API
+    // Non API
 
     private String addressUrlHelper(Address address, HttpServletRequest request) {
         StringBuilder resourcePath = new StringBuilder();
@@ -111,11 +111,10 @@ public class AddressService implements IAddressService {
     }
 
     private Address findAddressIfExists(Long id) {
-        return addressRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Address ", "id", id));
+        return addressRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Address ", "id", id));
     }
 
-    private Address findByAddressId(List<Address> addresses,Long addressId) {
+    private Address findByAddressId(List<Address> addresses, Long addressId) {
         return apiUtils.findByProperty(addresses, address -> addressId == address.getId());
     }
 
