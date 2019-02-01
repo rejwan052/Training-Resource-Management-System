@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -126,6 +127,25 @@ public class EmployeeService implements IEmployeeService {
         employeeRepository.delete(existingEmployee);
         return new ResponseEntity<Employee>(HttpStatus.NO_CONTENT);
     }
+
+    @Override
+    public boolean checkEmailNotTaken(String emailAddress,String employeeId) {
+
+        if(null == employeeId){
+            Optional<Employee> employee = employeeRepository.findByEmail(emailAddress);
+            if(employee.isPresent()){
+                return true;
+            }
+        }else{
+            Optional<Employee> employee = employeeRepository.findByEmailAndIdNot(emailAddress,Long.valueOf(employeeId));
+            if(employee.isPresent()){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
 
     // Non API

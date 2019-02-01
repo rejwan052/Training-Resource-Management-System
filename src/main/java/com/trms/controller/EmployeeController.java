@@ -65,4 +65,9 @@ public class EmployeeController {
         return employeeService.deleteEmployee(id);
     }
 
+    @GetMapping("/employees/check-email")
+    public boolean checkEmailAddress(@RequestParam(value = "email") String email,@RequestParam(value = "employeeId") String employeeId){
+        return employeeService.checkEmailNotTaken(email,employeeId);
+    }
+
 }

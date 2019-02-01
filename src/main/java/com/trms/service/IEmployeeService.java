@@ -17,5 +17,5 @@ public interface IEmployeeService {
     ResponseEntity<Employee> patchUpdateEmployee(Long id, Employee employeeUpdates);
     ResponseEntity<Employee> putUpdateEmployee(Long id, EmployeeRequest employeeUpdates);
     ResponseEntity<Employee> deleteEmployee(Long id);
-
+    boolean checkEmailNotTaken(String emailAddress,String employeeId);
 }
