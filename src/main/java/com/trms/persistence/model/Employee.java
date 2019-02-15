@@ -20,6 +20,8 @@ public class Employee extends DateAudit {
 
     private String lastName;
 
+    private String fullName;
+
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -99,5 +101,13 @@ public class Employee extends DateAudit {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName() {
+        this.fullName = this.getFirstName()+" "+this.getLastName();
     }
 }

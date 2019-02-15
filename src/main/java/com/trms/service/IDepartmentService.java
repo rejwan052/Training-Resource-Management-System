@@ -20,5 +20,4 @@ public interface IDepartmentService {
     Page<Department> searchDepartments(String searchTerm,Pageable pageable);
     List<Department> searchByDepartmentName(String searchTerm);
 
-
 }

@@ -66,6 +66,7 @@ public class EmployeeService implements IEmployeeService {
         Employee employee = new Employee();
         employee.setFirstName(employeeRequest.getFirstName());
         employee.setLastName(employeeRequest.getLastName());
+        employee.setFullName();
         employee.setEmail(employeeRequest.getEmail());
         employee.setDateOfBirth(employeeRequest.getDateOfBirth());
         if(employeeRequest.getGender().toUpperCase().equalsIgnoreCase("MALE")){
@@ -107,8 +108,12 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public ResponseEntity<Employee> putUpdateEmployee(Long id, EmployeeRequest employeeUpdates) {
+
         Employee existingEmployee = findEmployeeIfExists(id);
+
         BeanUtils.copyProperties(employeeUpdates,existingEmployee);
+
+        existingEmployee.setFullName();
         existingEmployee.setId(id);
 
         Employee updatedEmployee = employeeRepository.saveAndFlush(existingEmployee);

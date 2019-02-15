@@ -8,7 +8,6 @@ import com.trms.persistence.repository.DepartmentRepository;
 import com.trms.predicates.DepartmentPredicates;
 import com.trms.service.IDepartmentService;
 import com.trms.utility.ApiUtils;
-import org.apache.commons.collections4.IteratorUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

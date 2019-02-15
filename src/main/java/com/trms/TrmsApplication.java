@@ -18,7 +18,7 @@ public class TrmsApplication extends SpringBootServletInitializer {
 
 	@PostConstruct
 	void init() {
-		TimeZone.setDefault(TimeZone.getTimeZone("GMT+6"));
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
 
 	public static void main(String[] args) {
