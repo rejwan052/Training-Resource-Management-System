@@ -1,12 +1,16 @@
 package com.trms.persistence.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.trms.enums.Gender;
 import com.trms.persistence.model.audit.DateAudit;
+import com.trms.serializers.CustomAddressSerializer;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "employee")
@@ -38,6 +42,10 @@ public class Employee extends DateAudit {
     @JoinColumn(name = "departmentId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Department department;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "employee")
+    @JsonSerialize(using = CustomAddressSerializer.class)
+    private List<Address> addressList = new ArrayList<Address>();
 
     public Long getId() {
         return id;
@@ -109,5 +117,17 @@ public class Employee extends DateAudit {
 
     public void setFullName() {
         this.fullName = this.getFirstName()+" "+this.getLastName();
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public List<Address> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
     }
 }
