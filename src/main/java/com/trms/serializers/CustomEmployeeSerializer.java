@@ -17,7 +17,6 @@ public class CustomEmployeeSerializer extends StdSerializer<Employee> {
         super(t);
     }
 
-
     @Override
     public void serialize(Employee employee, JsonGenerator generator, SerializerProvider provider) throws IOException {
         generator.writeStartObject();
@@ -26,9 +25,9 @@ public class CustomEmployeeSerializer extends StdSerializer<Employee> {
         generator.writeFieldName("fullName");
         generator.writeString(employee.getFullName());
         generator.writeFieldName("designation");
-        generator.writeNumber(employee.getDesignation().toString());
+        generator.writeNumber(employee.getDesignation().getName());
         generator.writeFieldName("department");
-        generator.writeNumber(employee.getDepartment().toString());
+        generator.writeNumber(employee.getDepartment().getName());
         generator.writeEndObject();
     }
 }

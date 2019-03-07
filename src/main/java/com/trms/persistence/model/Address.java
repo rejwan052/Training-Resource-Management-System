@@ -1,8 +1,7 @@
 package com.trms.persistence.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.trms.persistence.model.audit.DateAudit;
-import com.trms.serializers.CustomEmployeeSerializer;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -16,22 +15,23 @@ public class Address extends DateAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "addressLine1",columnDefinition = "TEXT")
+    @Column(name = "addressLine1", columnDefinition = "TEXT")
     private String addressLine1;
 
-    @Column(name = "addressLine2",columnDefinition = "TEXT")
+    @Column(name = "addressLine2", columnDefinition = "TEXT")
     private String addressLine2;
 
-    /*City/District*/
+    /* City/District */
     private String city;
 
-    /*Town/Village*/
+    /* Town/Village */
     private String town;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "employeeId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonSerialize(using = CustomEmployeeSerializer.class)
+    // @JsonSerialize(using = CustomEmployeeSerializer.class)
+    @JsonIgnore
     private Employee employee;
 
     public Long getId() {

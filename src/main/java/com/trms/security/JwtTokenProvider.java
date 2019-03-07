@@ -4,10 +4,14 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
@@ -24,12 +28,15 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
-        return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getId()))
-                .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
+        return Jwts.builder().setSubject(Long.toString(userPrincipal.getId())).setIssuedAt(new Date())
+                .setExpiration(expiryDate).signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+
+        // return
+        // Jwts.builder().setSubject(Long.toString(userPrincipal.getId())).setIssuedAt(new
+        // Date())
+        // .claim("roles",
+        // getRolesFromAuthorities(userPrincipal.getAuthorities())).setExpiration(expiryDate)
+        // .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
     }
 
     public String generateRefreshToken() {
@@ -38,10 +45,7 @@ public class JwtTokenProvider {
     }
 
     public Long getUserIdFromJWT(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
 
         return Long.parseLong(claims.getSubject());
     }
@@ -62,6 +66,14 @@ public class JwtTokenProvider {
             logger.error("JWT claims string is empty.");
         }
         return false;
+    }
+
+    private String[] getRolesFromAuthorities(final Collection<? extends GrantedAuthority> authorities) {
+
+        List<String> roles = authorities.stream().map(r -> r.getAuthority()).collect(Collectors.toList());
+
+        return roles.toArray(new String[0]);
+
     }
 
 }
