@@ -1,6 +1,7 @@
 package com.trms.service;
 
 import com.querydsl.core.types.Predicate;
+import com.trms.payload.Response;
 import com.trms.persistence.model.Designation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,5 +19,6 @@ public interface IDesignationService {
     ResponseEntity<Designation> putUpdateDesignation(Long id, Designation designationUpdates);
     ResponseEntity<Designation> deleteDesignation(Long id);
     List<Designation> searchByDesignationName(String searchTerm);
-
+    Response gridList(HttpServletRequest request);
+    long countAllDesignations();
 }

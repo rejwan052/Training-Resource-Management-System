@@ -3,10 +3,9 @@ package com.trms.service.impl;
 import com.querydsl.core.types.Predicate;
 import com.trms.exception.EntityAttributeAlreadyExistsException;
 import com.trms.exception.ResourceNotFoundException;
-import com.trms.persistence.model.Department;
+import com.trms.payload.Response;
 import com.trms.persistence.model.Designation;
 import com.trms.persistence.repository.DesignationRepository;
-import com.trms.predicates.DepartmentPredicates;
 import com.trms.predicates.DesignationPredicates;
 import com.trms.service.IDesignationService;
 import com.trms.utility.ApiUtils;
@@ -47,6 +46,13 @@ public class DesignationService implements IDesignationService {
     public ResponseEntity<Page<Designation>> getAllDesignationsResponse(Predicate predicate, Pageable pageable) {
         Page<Designation> page = designationRepository.findAll(predicate,pageable);
         return new ResponseEntity<Page<Designation>>(page, HttpStatus.OK);
+    }
+
+    public Response gridList(HttpServletRequest request) {
+
+        Response response = new Response();
+
+        return response;
     }
 
     @Override
@@ -104,6 +110,11 @@ public class DesignationService implements IDesignationService {
         return designationList;
     }
 
+    @Override
+    public long countAllDesignations() {
+        return designationRepository.count();
+    }
+
     // Non API
     private boolean isDesignationNameExist(final String departmentName) {
         final Designation designation = designationRepository.findByNameIgnoreCase(departmentName);
@@ -127,4 +138,5 @@ public class DesignationService implements IDesignationService {
         return designationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Designation", "id", id));
     }
+
 }

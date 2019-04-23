@@ -1,10 +1,13 @@
 package com.trms.controller;
 
+import com.google.gson.Gson;
 import com.querydsl.core.types.Predicate;
-import com.trms.persistence.model.Department;
+import com.trms.pagination.DataTableRequest;
+import com.trms.pagination.DataTableResults;
+import com.trms.pagination.PaginationCriteria;
 import com.trms.persistence.model.Designation;
-import com.trms.service.IDepartmentService;
 import com.trms.service.IDesignationService;
+import com.trms.utility.ApiUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +20,10 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -30,6 +36,12 @@ public class DesignationController {
     @Autowired
     private IDesignationService designationService;
 
+    @Autowired
+    private ApiUtils apiUtils;
+
+    @Autowired
+    private EntityManager entityManager;
+
     // Get all designations
     @GetMapping("/designations")
     public ResponseEntity<Page<Designation>> getAllDesignations(@QuerydslPredicate(root = Designation.class) Predicate predicate, @PageableDefault(size=10) @SortDefault.SortDefaults({
@@ -38,6 +50,39 @@ public class DesignationController {
         return designationService.getAllDesignationsResponse(predicate,pageable);
 
     }
+
+
+    @GetMapping("/designationsGrid")
+    public String listUsersPaginated(HttpServletRequest request, HttpServletResponse response) {
+
+        DataTableRequest<Designation> dataTableInRQ = new DataTableRequest<Designation>(request);
+        PaginationCriteria pagination = dataTableInRQ.getPaginationRequest();
+
+        String baseQuery = "SELECT id, name,createdAt,updatedAt FROM designation";
+        String paginatedQuery = apiUtils.buildPaginatedQuery(baseQuery, pagination);
+
+        LOGGER.info("paginated Query"+paginatedQuery);
+
+        Query query = entityManager.createNativeQuery(paginatedQuery, Designation.class);
+
+        @SuppressWarnings("unchecked")
+        List<Designation> userList = query.getResultList();
+
+        DataTableResults<Designation> dataTableResult = new DataTableResults<Designation>();
+        dataTableResult.setDraw(dataTableInRQ.getDraw());
+        dataTableResult.setListOfDataObjects(userList);
+        if (!apiUtils.isObjectEmpty(userList)) {
+            dataTableResult.setRecordsTotal(String.valueOf(designationService.countAllDesignations()));
+            if (dataTableInRQ.getPaginationRequest().isFilterByEmpty()) {
+                dataTableResult.setRecordsFiltered(String.valueOf(designationService.countAllDesignations()));
+            } else {
+                dataTableResult.setRecordsFiltered(Integer.toString(userList.size()));
+            }
+        }
+        return new Gson().toJson(dataTableResult);
+    }
+
+
 
     // Get designations by searching name
     @GetMapping("/designations/search-by-name")

@@ -99,9 +99,7 @@ public class AuthController {
         JwtRefreshToken jwtRefreshToken = new JwtRefreshToken(refreshToken);
         jwtRefreshToken.setUser(userRepository.getOne(userPrincipal.getId()));
 
-//        Instant expirationDateTime = Instant.now().plus(360, ChronoUnit.DAYS); // Todo Add this in
-                                                                               // application.properties
-        Instant expirationDateTime = Instant.now().plus(jwtExpirationInMs, ChronoUnit.MILLIS);
+        Instant expirationDateTime = Instant.now().plus(jwtExpirationInMs, ChronoUnit.MILLIS); // Todo Add this in application.properties
 
         jwtRefreshToken.setExpirationDateTime(expirationDateTime);
 

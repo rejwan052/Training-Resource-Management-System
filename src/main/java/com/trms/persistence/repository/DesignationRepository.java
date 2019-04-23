@@ -14,6 +14,8 @@ public interface DesignationRepository extends JpaRepository<Designation,Long>, 
 
     Designation findByNameIgnoreCase(String name);
 
+    long count();
+
     @Override
     default public void customize(QuerydslBindings bindings, QDesignation root) {
         bindings.bind(String.class).first((StringPath path, String value) -> path.containsIgnoreCase(value));
